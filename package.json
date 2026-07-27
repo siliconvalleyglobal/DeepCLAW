@@ -1,9 +1,16 @@
 {
   "name": "@svgph/deepclaw",
-  "version": "0.1.1",
-  "description": "An Enterprise-Governance-First Open Source AI Agent Framework (Node.js & TypeScript SDK)",
+  "version": "0.1.2",
+  "description": "An Enterprise-Governance-First, Open Source AI Agent Framework",
   "main": "index.js",
   "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
