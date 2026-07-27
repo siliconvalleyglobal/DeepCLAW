@@ -121,6 +121,16 @@ deepclaw/
 
 ---
 
+## 📚 Documentation & Technical Guides
+
+- 🏛️ **[Architecture Guide](docs/ARCHITECTURE.md)** — Graph execution engine, checkpoints, & memory tiering.
+- 🛡️ **[Zero-Trust Governance & Security](docs/GOVERNANCE_AND_SECURITY.md)** — Pre-execution policy engine, SIEM audit logging, & ISO 42001 / SOC 2 compliance.
+- 💬 **[Channel Gateway Guide](docs/CHANNEL_GATEWAY.md)** — Configuring 14+ messaging platform channel adapters.
+- 📊 **[Evals & Production Replay](docs/EVALS_AND_REPLAY.md)** — Capability evaluation harness & 1-command trace replay.
+- 🔒 **[Zero-Open-Port Security Deployment](docs/ZERO_OPEN_PORT_DEPLOYMENT.md)** — Cloudflare Tunnel reverse proxy setup.
+
+---
+
 ## 🔒 Security Posture
 
 DeepClaw defaults to a **zero-open-port deployment model** — agents are reachable through secure tunneling rather than exposed public ports, closing off the most common source of accidental instance exposure. See `docs/ZERO_OPEN_PORT_DEPLOYMENT.md` for setup guides.
