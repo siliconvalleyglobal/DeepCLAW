@@ -1,6 +1,6 @@
 {
   "name": "@svgph/deepclaw",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An Enterprise-Governance-First Open Source AI Agent Framework (Node.js & TypeScript SDK)",
   "main": "index.js",
   "types": "index.d.ts",
