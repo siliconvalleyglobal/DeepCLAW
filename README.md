@@ -123,6 +123,7 @@ deepclaw/
 
 ## 📚 Documentation & Technical Guides
 
+- 📖 **[User Manual & Operations Guide](docs/USER_MANUAL.md)** — Complete end-to-end setup, LLM binding, custom tools, state management, and CLI guide.
 - 🏛️ **[Architecture Guide](docs/ARCHITECTURE.md)** — Graph execution engine, checkpoints, & memory tiering.
 - 🛡️ **[Zero-Trust Governance & Security](docs/GOVERNANCE_AND_SECURITY.md)** — Pre-execution policy engine, SIEM audit logging, & ISO 42001 / SOC 2 compliance.
 - 💬 **[Channel Gateway Guide](docs/CHANNEL_GATEWAY.md)** — Configuring 14+ messaging platform channel adapters.
