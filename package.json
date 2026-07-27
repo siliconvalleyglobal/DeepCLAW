@@ -1,0 +1,29 @@
+{
+  "name": "@svgph/deepclaw",
+  "version": "0.1.0",
+  "description": "An Enterprise-Governance-First Open Source AI Agent Framework (Node.js & TypeScript SDK)",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siliconvalleyglobal/DeepCLAW.git"
+  },
+  "keywords": [
+    "deepclaw",
+    "ai-agents",
+    "governance",
+    "zero-trust",
+    "mcp",
+    "langgraph",
+    "openmanus"
+  ],
+  "author": "DeepClaw Authors & Contributors (Silicon Valley Global)",
+  "bugs": {
+    "url": "https://github.com/siliconvalleyglobal/DeepCLAW/issues"
+  },
+  "homepage": "https://github.com/siliconvalleyglobal/DeepCLAW#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}

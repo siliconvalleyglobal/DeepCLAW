@@ -3,6 +3,7 @@
 ### *An Enterprise-Governance-First Open Source AI Agent Framework*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/@svgph/deepclaw.svg)](https://www.npmjs.com/package/@svgph/deepclaw)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-brightgreen.svg)](pyproject.toml)
 [![Build Status](https://img.shields.io/badge/Tests-100%25%20Passing-success.svg)](tests/)
 [![Governance](https://img.shields.io/badge/Governance-Zero--Trust%20Default-purple.svg)](deepclaw/governance/)
