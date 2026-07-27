@@ -19,19 +19,6 @@ Most agent frameworks are developer-experience-first and treat governance, secur
 - **The Security Risk**: Public instances of un-governed frameworks are often exposed directly to the internet without identity verification or policy controls.
 - **The DeepClaw Edge**: Every tool call in DeepClaw passes through a **Zero-Trust pre-execution policy engine** rendering `PERMIT` or `DENY` decisions with full reasoning traces *before* the action takes place.
 
----
-
-## 🏛️ Architectural Lineage & Framework Design Principles
-
-DeepClaw builds upon industry-proven architectural paradigms established by leading open-source agent frameworks and agentic SDKs, synthesizing their strengths into a unified, enterprise-governed platform:
-
-- **Stateful Cyclic Directed Execution (Inspired by LangGraph)**: DeepClaw adopts a directed graph execution model supporting cycles, conditional transitions, and durable state checkpointing ([`deepclaw/core/graph.py`](deepclaw/core/graph.py)). This ensures robust handling of multi-step, iterative agent workflows without abstraction overhead.
-- **Clean Agent Hierarchy & Modular Tooling (Inspired by OpenManus)**: DeepClaw leverages an intuitive `BaseAgent` and `ToolCallAgent` hierarchy ([`deepclaw/core/agent.py`](deepclaw/core/agent.py)) paired with structured, type-validated tool schemas ([`deepclaw/tools/schema.py`](deepclaw/tools/schema.py)), maintaining transparency and ease of inspection.
-- **Dedicated Memory Tiering (Inspired by Mem0)**: DeepClaw strictly separates bounded short-term conversation context buffers ([`deepclaw/memory/short_term.py`](deepclaw/memory/short_term.py)) from persistent, vector-backed long-term semantic memory ([`deepclaw/memory/long_term.py`](deepclaw/memory/long_term.py)), preventing state corruption across long-running sessions.
-- **Provider-Agnostic Guardrails (Inspired by OpenAI & Claude Agent SDKs)**: DeepClaw implements model-agnostic tool schemas and pre-execution validation guardrails ([`deepclaw/tools/guardrails.py`](deepclaw/tools/guardrails.py)), ensuring seamless interoperability across OpenAI, Claude, Gemini, and local LLMs via LiteLLM bindings.
-- **Structured Multi-Agent Delegation (Inspired by CrewAI)**: DeepClaw provides a role-based coordination module ([`deepclaw/agents/coordinator.py`](deepclaw/agents/coordinator.py)) enabling a lead agent to delegate, execute in parallel, and aggregate results from specialized worker agents while enforcing Zero-Trust governance boundaries.
-
----
 
 ## 🚀 Key Framework Primitives
 
