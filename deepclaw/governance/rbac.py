@@ -19,9 +19,9 @@ class RBACPolicy:
     def __init__(self):
         self._role_permissions: Dict[str, Set[str]] = {
             Role.ADMIN.value: {"*"},
-            Role.WORKFLOW_OPERATOR.value: {"read", "write", "mcp_*", "db_query"},
-            Role.RESTRICTED_AGENT.value: {"read", "mcp_query"},
-            Role.EXTERNAL_CHANNEL.value: {"read_public", "send_reply"},
+            Role.WORKFLOW_OPERATOR.value: {"read", "write", "mcp_*", "db_query", "memory_write", "memory_read", "channel_send"},
+            Role.RESTRICTED_AGENT.value: {"read", "mcp_query", "memory_read"},
+            Role.EXTERNAL_CHANNEL.value: {"read_public", "send_reply", "channel_send"},
         }
 
     def is_permitted(self, roles: List[str], action: str) -> bool:

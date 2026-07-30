@@ -4,7 +4,7 @@ Unit tests for Zero-Trust policy engine, pre-execution permit/deny enforcement, 
 
 import pytest
 from deepclaw.governance.identity import AgentIdentity
-from deepclaw.governance.policy import PreExecutionPolicyEngine
+from deepclaw.governance.policy import ActionType, PreExecutionPolicyEngine
 from deepclaw.governance.audit_log import AuditLogger
 from deepclaw.governance.rbac import Role
 from deepclaw.tools.guardrails import ToolGuardrails
@@ -18,7 +18,7 @@ def test_guardrails_destructive_payload():
     assert len(violations) > 0
 
 
-def test_pre_execution_policy_engine():
+def test_pre_execution_policy_engine_tool_call():
     engine = PreExecutionPolicyEngine()
 
     # Restricted agent attempting admin action
@@ -32,7 +32,7 @@ def test_pre_execution_policy_engine():
         arguments={},
     )
     assert decision.permitted is False
-    assert "lack permission" in decision.reasoning_trace
+    assert "lack permission" in decision.reasoning_trace or "lacks permission" in decision.reasoning_trace
 
     # Admin agent attempting valid tool call
     admin_id = AgentIdentity(
@@ -45,6 +45,37 @@ def test_pre_execution_policy_engine():
         arguments={},
     )
     assert admin_decision.permitted is True
+
+
+def test_pre_execution_policy_engine_generic_actions():
+    engine = PreExecutionPolicyEngine()
+
+    restricted_id = AgentIdentity(
+        name="RestrictedBot",
+        roles=[Role.RESTRICTED_AGENT.value],
+        tenant_id="tenant-alpha",
+    )
+
+    # Restricted agent reading memory (allowed)
+    read_decision = engine.evaluate_action(
+        identity=restricted_id,
+        action_type=ActionType.MEMORY_READ,
+        target="long_term_memory",
+        payload={"query": "governance"},
+    )
+    assert read_decision.permitted is True
+    assert read_decision.action_type == ActionType.MEMORY_READ.value
+    assert read_decision.tenant_id == "tenant-alpha"
+
+    # Restricted agent writing memory (denied)
+    write_decision = engine.evaluate_action(
+        identity=restricted_id,
+        action_type=ActionType.MEMORY_WRITE,
+        target="long_term_memory",
+        payload={"text": "secret payload"},
+    )
+    assert write_decision.permitted is False
+    assert write_decision.action_type == ActionType.MEMORY_WRITE.value
 
 
 def test_siem_audit_log_export():

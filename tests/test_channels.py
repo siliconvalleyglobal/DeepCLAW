@@ -1,23 +1,35 @@
 """
-Unit tests for messaging channels and channel router governance across all platform adapters.
+Unit tests for messaging channels and channel router governance across all 24 platform adapters.
 """
 
 import pytest
 from deepclaw.channels.channel_router import ChannelRouter
-from deepclaw.channels.adapters.telegram import TelegramChannel
-from deepclaw.channels.adapters.whatsapp import WhatsAppChannel
-from deepclaw.channels.adapters.slack import SlackChannel
-from deepclaw.channels.adapters.discord import DiscordChannel
-from deepclaw.channels.adapters.custom_webhook import CustomWebhookChannel
-from deepclaw.channels.adapters.imessage import IMessageChannel
-from deepclaw.channels.adapters.wechat import WeChatChannel
-from deepclaw.channels.adapters.feishu import FeishuChannel
-from deepclaw.channels.adapters.matrix import MatrixChannel
-from deepclaw.channels.adapters.microsoft_teams import MicrosoftTeamsChannel
-from deepclaw.channels.adapters.google_chat import GoogleChatChannel
-from deepclaw.channels.adapters.sms_twilio import TwilioSMSChannel
-from deepclaw.channels.adapters.email_smtp import EmailChannel
-from deepclaw.channels.adapters.webchat_widget import WebChatWidgetChannel
+from deepclaw.channels.adapters import (
+    TelegramChannel,
+    WhatsAppChannel,
+    SlackChannel,
+    DiscordChannel,
+    CustomWebhookChannel,
+    IMessageChannel,
+    WeChatChannel,
+    FeishuChannel,
+    MatrixChannel,
+    MicrosoftTeamsChannel,
+    GoogleChatChannel,
+    TwilioSMSChannel,
+    EmailChannel,
+    WebChatWidgetChannel,
+    SignalChannel,
+    LineChannel,
+    KakaoTalkChannel,
+    MessengerChannel,
+    InstagramDMChannel,
+    TwitterDMChannel,
+    RocketChatChannel,
+    MattermostChannel,
+    ZaloChannel,
+    ViberChannel,
+)
 from deepclaw.channels.base_channel import ChannelMessage
 from deepclaw.governance.identity import AgentIdentity
 
@@ -42,28 +54,32 @@ async def test_telegram_channel_routing():
 
 
 @pytest.mark.asyncio
-async def test_imessage_channel_routing():
+async def test_signal_channel_routing():
     router = ChannelRouter()
-    router.register_channel(IMessageChannel())
+    router.register_channel(SignalChannel())
 
-    raw_payload = {"sender_handle": "user@apple.com", "body": "Hello iMessage"}
+    raw_payload = {
+        "envelope": {"source": "+1234567890", "dataMessage": {"message": "Secret Signal message"}}
+    }
 
     async def handler(msg: ChannelMessage, identity: AgentIdentity):
-        assert identity.channel_origin == "imessage"
+        assert identity.channel_origin == "signal"
         return f"Echo: {msg.content}"
 
-    res = await router.route_inbound("imessage", raw_payload, handler)
+    res = await router.route_inbound("signal", raw_payload, handler)
     assert res["status"] == "routed_and_executed"
-    assert res["handler_result"] == "Echo: Hello iMessage"
+    assert res["handler_result"] == "Echo: Secret Signal message"
 
 
 @pytest.mark.asyncio
-async def test_all_adapters_registration():
+async def test_all_24_adapters_registration():
     adapters = [
+        TelegramChannel(),
         WhatsAppChannel(),
         SlackChannel(),
         DiscordChannel(),
         CustomWebhookChannel(),
+        IMessageChannel(),
         WeChatChannel(),
         FeishuChannel(),
         MatrixChannel(),
@@ -72,10 +88,21 @@ async def test_all_adapters_registration():
         TwilioSMSChannel(),
         EmailChannel(),
         WebChatWidgetChannel(),
+        SignalChannel(),
+        LineChannel(),
+        KakaoTalkChannel(),
+        MessengerChannel(),
+        InstagramDMChannel(),
+        TwitterDMChannel(),
+        RocketChatChannel(),
+        MattermostChannel(),
+        ZaloChannel(),
+        ViberChannel(),
     ]
 
     router = ChannelRouter()
     for adapter in adapters:
         router.register_channel(adapter)
 
-    assert len(router.channels) == len(adapters)
+    assert len(router.channels) == 24
+    assert len(adapters) == 24
