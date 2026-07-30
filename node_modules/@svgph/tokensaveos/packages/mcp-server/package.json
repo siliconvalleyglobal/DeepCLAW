@@ -1,0 +1,20 @@
+{
+  "name": "@tokensaveos/mcp-server",
+  "version": "1.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@tokensaveos/core": "*",
+    "@tokensaveos/context-engine": "*",
+    "@tokensaveos/token-engine": "*",
+    "@tokensaveos/cache-manager": "*",
+    "@tokensaveos/memory-engine": "*"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

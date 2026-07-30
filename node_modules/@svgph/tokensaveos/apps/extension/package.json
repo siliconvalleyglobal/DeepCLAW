@@ -1,0 +1,35 @@
+{
+  "name": "@tokensaveos/extension",
+  "displayName": "TokenSaveOS — AI Token Optimization",
+  "version": "1.3.0",
+  "description": "Real-time token counter, live cost breakdown, and 1-click prompt optimizer for VS Code & Cursor IDE.",
+  "publisher": "siliconvalleyglobal",
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCommand:tokensave.optimizePrompt",
+    "onCommand:tokensave.openDashboard"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "tokensave.optimizePrompt",
+        "title": "TokenSaveOS: Optimize Selected Prompt"
+      },
+      {
+        "command": "tokensave.openDashboard",
+        "title": "TokenSaveOS: Open Live Analytics Dashboard"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@tokensaveos/core": "*",
+    "@tokensaveos/token-engine": "*"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.4.0"
+  }
+}

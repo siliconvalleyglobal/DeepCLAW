@@ -29,5 +29,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@svgph/tokensaveos": "^1.3.1"
   }
 }
