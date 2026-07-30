@@ -1,12 +1,32 @@
-.venv/
+# Python
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
-dist/
-build/
-*.egg-info/
-.npmrc
+.coverage
+htmlcov/
+*.db
 
+# Node & TokenSaveOS
+node_modules/
+dist/
+.tokensave/
+package-lock.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment & Secrets
+.env
+.env.*
+secrets.json
