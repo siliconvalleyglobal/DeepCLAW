@@ -1,23 +1,28 @@
-"""
-Zero-Trust Enterprise Governance primitives and ISO 42001 compliance.
-"""
-
-from deepclaw.governance.identity import AgentIdentity
-from deepclaw.governance.rbac import RBACPolicy, Role
-from deepclaw.governance.policy import PreExecutionPolicyEngine, PolicyDecision
-from deepclaw.governance.audit_log import AuditLogger
-from deepclaw.governance.sandbox import ExecutionSandbox
-from deepclaw.governance.human_checkpoint import HumanCheckpointNode
-from deepclaw.governance.compliance import ComplianceReportGenerator
+from .policy import PreExecutionPolicyEngine, PolicyDecision
+from .identity import AgentIdentity
+from .rbac import RBACPolicy, Role
+RBACMatrix = RBACPolicy
+from .sandbox import ExecutionSandbox, SubprocessSandbox
+from .audit_log import AuditLogger
+from .compliance import ComplianceReportGenerator
+from .human_checkpoint import HumanCheckpointNode
+HumanInTheLoopCheckpoint = HumanCheckpointNode
+from .sso import SSOProvider
+from .vulnerability_scanner import VulnerabilityScanner
 
 __all__ = [
-    "AgentIdentity",
-    "RBACPolicy",
-    "Role",
     "PreExecutionPolicyEngine",
     "PolicyDecision",
-    "AuditLogger",
+    "AgentIdentity",
+    "Role",
+    "RBACPolicy",
+    "RBACMatrix",
     "ExecutionSandbox",
-    "HumanCheckpointNode",
+    "SubprocessSandbox",
+    "AuditLogger",
     "ComplianceReportGenerator",
+    "HumanCheckpointNode",
+    "HumanInTheLoopCheckpoint",
+    "SSOProvider",
+    "VulnerabilityScanner",
 ]

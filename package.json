@@ -1,6 +1,6 @@
 {
   "name": "@svgph/deepclaw",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An Enterprise Agentic AI Security, Governance & Orchestration Framework",
   "main": "deepclaw/index.js",
   "types": "deepclaw/index.d.ts",
