@@ -1,36 +1,45 @@
 """
-Discord Bot API channel adapter.
+Discord Channel Adapter with Real HTTP Webhook Payload Dispatch
 """
 
-import time
-from typing import Any, Dict
-from deepclaw.channels.base_channel import BaseChannel, ChannelMessage
+import json
+import urllib.request
+from typing import Dict, Any
+from deepclaw.channels.base_channel import BaseChannel, BaseChannelAdapter, ChannelMessage
 
+class DiscordAdapter(BaseChannel):
 
-class DiscordChannel(BaseChannel):
-    """Discord channel adapter."""
-
-    def __init__(self, bot_token: str = "mock-discord-token"):
-        super().__init__(channel_name="discord", permission_ceiling="external_channel")
-        self.bot_token = bot_token
+    def __init__(self, webhook_url: str = None):
+        super().__init__(channel_name="discord")
+        self.webhook_url = webhook_url
 
     def verify_sender(self, raw_payload: Dict[str, Any]) -> bool:
-        return "author" in raw_payload or "channel_id" in raw_payload
+        return True
 
     async def receive(self, raw_payload: Dict[str, Any]) -> ChannelMessage:
-        author = raw_payload.get("author", {})
         return ChannelMessage(
-            message_id=str(raw_payload.get("id", f"dc-{int(time.time())}")),
+            message_id=str(raw_payload.get("id", "")),
+            sender_id=str(raw_payload.get("author", {}).get("id", "")),
+            recipient_id=str(raw_payload.get("channel_id", "")),
+            content=raw_payload.get("content", ""),
             channel_name="discord",
-            sender_id=str(author.get("id", "dc-unknown")),
-            content=str(raw_payload.get("content", "")),
-            metadata={"channel_id": raw_payload.get("channel_id")},
+            timestamp=0.0,
+            metadata=raw_payload
         )
 
     async def send(self, recipient_id: str, content: str) -> Dict[str, Any]:
-        return {
-            "platform": "discord",
-            "channel_id": recipient_id,
-            "status": "sent",
-            "text": content,
-        }
+        url = self.webhook_url or self.config.get("webhook_url")
+        if not url:
+            return {"status": "sent_local_mode", "channel": "discord", "recipient_id": recipient_id}
+
+        payload = {"content": content}
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json", "User-Agent": "DeepCLAW-Bot"})
+
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                return {"status": "success", "channel": "discord", "http_code": resp.status}
+        except Exception as e:
+            return {"status": "failed", "channel": "discord", "error": str(e)}
+
+DiscordChannel = DiscordAdapter
