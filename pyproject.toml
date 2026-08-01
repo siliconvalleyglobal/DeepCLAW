@@ -4,13 +4,19 @@ build-backend = "hatchling.build"
 
 [project]
 name = "deepclaw"
-version = "0.1.3"
-description = "An Enterprise-Governance-First Open Source AI Agent Framework"
+version = "1.1.1"
+description = "An Enterprise Agentic AI Security, Governance & Multi-Platform Orchestration Framework by SILICON VALLEY GLOBAL PH INC"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
-  { name = "DeepClaw Contributors" }
+  { name = "SILICON VALLEY GLOBAL PH INC", email = "opensource@svg.ph" }
+]
+keywords = [
+  "ai", "llm", "agent", "ai-agent", "agentic-ai", "ai-security",
+  "ai-governance", "zero-trust", "policy-engine", "rbac", "sandbox",
+  "audit-logger", "sso", "vulnerability-scanner", "mcp", "a2a", "evals",
+  "deepclaw", "svgph", "siliconvalleyglobal"
 ]
 dependencies = [
   "pydantic>=2.7.0",
@@ -20,6 +26,12 @@ dependencies = [
   "typing-extensions>=4.11.0",
   "structlog>=24.1.0"
 ]
+
+[project.urls]
+Homepage = "https://svg.ph"
+Documentation = "https://github.com/siliconvalleyglobal/DeepCLAW/tree/main/docs"
+Repository = "https://github.com/siliconvalleyglobal/DeepCLAW.git"
+Issues = "https://github.com/siliconvalleyglobal/DeepCLAW/issues"
 
 [project.scripts]
 deepclaw = "deepclaw.cli.main:cli_entry"
