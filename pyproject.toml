@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "deepclaw"
-version = "1.1.1"
+version = "1.2.0"
 description = "An Enterprise Agentic AI Security, Governance & Multi-Platform Orchestration Framework by SILICON VALLEY GLOBAL PH INC"
 readme = "README.md"
 requires-python = ">=3.11"

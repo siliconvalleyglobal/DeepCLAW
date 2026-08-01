@@ -9,6 +9,8 @@ from .human_checkpoint import HumanCheckpointNode
 HumanInTheLoopCheckpoint = HumanCheckpointNode
 from .sso import SSOProvider
 from .vulnerability_scanner import VulnerabilityScanner
+from .token_budget import TokenBudgetGuard, TokenBudgetConfig, BudgetLimitExceededError
+from .dlp import DLPEngine, DLPRule, DLPScanResult
 
 __all__ = [
     "PreExecutionPolicyEngine",
@@ -25,4 +27,10 @@ __all__ = [
     "HumanInTheLoopCheckpoint",
     "SSOProvider",
     "VulnerabilityScanner",
+    "TokenBudgetGuard",
+    "TokenBudgetConfig",
+    "BudgetLimitExceededError",
+    "DLPEngine",
+    "DLPRule",
+    "DLPScanResult",
 ]

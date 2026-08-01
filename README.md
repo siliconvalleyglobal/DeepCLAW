@@ -8,7 +8,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/deepclaw.svg)](https://pypi.org/project/deepclaw/)
 [![Company Website](https://img.shields.io/badge/Website-svg.ph-brightgreen.svg)](https://svg.ph)
 [![Python Version](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](pyproject.toml)
-[![Build Status](https://img.shields.io/badge/Pytest-34%20Passing-success.svg)](deepclaw/tests/)
+[![Build Status](https://img.shields.io/badge/Pytest-37%20Passing-success.svg)](deepclaw/tests/)
 
 **DeepCLAW** is a production-grade security, policy-governance, multi-tenant memory, and orchestration platform built for agentic AI applications. Created and maintained by **[SILICON VALLEY GLOBAL PH INC](https://svg.ph)**.
 
