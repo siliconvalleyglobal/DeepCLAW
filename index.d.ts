@@ -11,7 +11,7 @@ export class AgentIdentity {
   roles: string[];
   channelOrigin: string | null;
   permissionCeiling: string;
-  constructor(options: AgentIdentityOptions);
+  constructor(options?: AgentIdentityOptions);
 }
 
 export interface PolicyDecision {
@@ -31,4 +31,13 @@ export class PreExecutionPolicyEngine {
 export class SIEMAuditLogger {
   logDecision(decision: PolicyDecision, metadata?: Record<string, any>): Record<string, any>;
   exportSiemJson(): string;
+}
+
+export class TokenBudgetGuard {
+  constructor(options?: { maxTokensPerMinute?: number; maxUsdPerDay?: number });
+  checkAndRecord(tenantId: string, tokens: number, costUsd?: number): { allowed: boolean; reason: string };
+}
+
+export class DLPEngine {
+  sanitize(text: string): { sanitizedText: string; matchesFound: number };
 }
