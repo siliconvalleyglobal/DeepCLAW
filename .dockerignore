@@ -1,0 +1,12 @@
+node_modules
+dist
+.turbo
+.git
+.gitignore
+README.md
+.env
+.env.*
+*.log
+.DS_Store
+.vscode
+.idea

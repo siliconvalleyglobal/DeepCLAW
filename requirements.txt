@@ -1,0 +1,9 @@
+# DeepCLAW runtime dependencies (pinned)
+# Generated from verified working environment
+# Install: pip install -r requirements.txt
+httpx==0.28.1
+litellm==1.83.9
+pydantic==2.12.5
+pydantic-core==2.41.5
+typing-extensions==4.16.0
+typing-inspection==0.4.2

@@ -1,11 +1,11 @@
 {
   "name": "@svgph/deepclaw",
-  "version": "1.2.0",
-  "description": "An Enterprise Agentic AI Security, Governance & Orchestration Framework",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "test": "pytest"
+  "version": "2.0.1",
+  "description": "Enterprise-Governance-First Open Source AI Agent Framework",
+  "packageManager": "pnpm@10.4.1",
+  "engines": {
+    "node": ">=26.0.0",
+    "pnpm": ">=10.0.0"
   },
   "keywords": [
     "ai",
@@ -27,24 +27,84 @@
     "a2a",
     "agent-to-agent",
     "evals",
+    "workflow",
+    "orchestration",
+    "multi-tenant",
+    "memory",
+    "vector-search",
+    "token-optimization",
+    "dlp",
+    "secret-redaction",
+    "budget-guard",
+    "channels",
+    "slack",
+    "telegram",
+    "discord",
+    "whatsapp",
+    "teams",
+    "email",
+    "sms",
+    "webhook",
+    "governance",
+    "compliance",
+    "iso-42001",
+    "soc2",
+    "siem",
     "deepclaw",
     "svgph",
     "siliconvalleyglobal"
   ],
   "author": "SILICON VALLEY GLOBAL PH INC <opensource@svg.ph>",
   "license": "MIT",
-  "homepage": "https://svg.ph",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/siliconvalleyglobal/DeepCLAW.git"
+    "url": "https://github.com/siliconvalleyglobal/DeepCLAW.git"
   },
+  "homepage": "https://svg.ph",
   "bugs": {
     "url": "https://github.com/siliconvalleyglobal/DeepCLAW/issues"
   },
-  "publishConfig": {
-    "access": "public"
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/siliconvalleyglobal"
   },
-  "dependencies": {
-    "@svgph/tokensaveos": "^1.3.3"
+  "workspaces": [
+    "packages/*",
+    "extensions/*",
+    "ui/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:ui": "pnpm --filter @deepclaw/ui build",
+    "build:gateway": "pnpm --filter @deepclaw/gateway build",
+    "build:sdk": "pnpm --filter @deepclaw/sdk build",
+    "dev": "pnpm --filter @deepclaw/ui dev",
+    "dev:gateway": "pnpm --filter @deepclaw/gateway dev",
+    "test": "pnpm -r test",
+    "test:unit": "pnpm --filter @deepclaw/sdk test:unit",
+    "test:e2e": "pnpm --filter @deepclaw/sdk test:e2e",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format",
+    "check": "pnpm lint && pnpm test",
+    "typecheck": "pnpm -r typecheck",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "clean": "pnpm -r clean && rm -rf node_modules dist .turbo"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.77.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "tsdown": "^0.22.14",
+    "tsx": "^4.19.3",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "pnpm": {
+    "overrides": {
+      "fast-xml-parser": "5.3.4",
+      "@sinclair/typebox": "0.34.48"
+    }
   }
 }

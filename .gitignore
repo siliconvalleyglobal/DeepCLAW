@@ -14,11 +14,13 @@ pip-delete-this-directory.txt
 htmlcov/
 *.db
 
-# Node & TokenSaveOS
+# Node / pnpm monorepo
 node_modules/
 dist/
+.turbo/
 .tokensave/
 package-lock.json
+pnpm-lock.yaml
 
 # IDE
 .idea/
@@ -30,3 +32,10 @@ package-lock.json
 .env
 .env.*
 secrets.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+*.tsbuildinfo

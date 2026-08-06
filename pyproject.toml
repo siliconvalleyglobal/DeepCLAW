@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "deepclaw"
-version = "1.2.0"
-description = "An Enterprise Agentic AI Security, Governance & Multi-Platform Orchestration Framework by SILICON VALLEY GLOBAL PH INC"
+version = "2.0.1"
+description = "Enterprise-Governance-First Open Source AI Agent Framework by SILICON VALLEY GLOBAL PH INC"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -13,18 +13,57 @@ authors = [
   { name = "SILICON VALLEY GLOBAL PH INC", email = "opensource@svg.ph" }
 ]
 keywords = [
-  "ai", "llm", "agent", "ai-agent", "agentic-ai", "ai-security",
-  "ai-governance", "zero-trust", "policy-engine", "rbac", "sandbox",
-  "audit-logger", "sso", "vulnerability-scanner", "mcp", "a2a", "evals",
-  "deepclaw", "svgph", "siliconvalleyglobal"
+  "ai",
+  "llm",
+  "agent",
+  "ai-agent",
+  "agentic-ai",
+  "ai-security",
+  "ai-governance",
+  "zero-trust",
+  "policy-engine",
+  "rbac",
+  "sandbox",
+  "audit-logger",
+  "sso",
+  "vulnerability-scanner",
+  "mcp",
+  "model-context-protocol",
+  "a2a",
+  "agent-to-agent",
+  "evals",
+  "workflow",
+  "orchestration",
+  "multi-tenant",
+  "memory",
+  "vector-search",
+  "token-optimization",
+  "dlp",
+  "secret-redaction",
+  "budget-guard",
+  "channels",
+  "slack",
+  "telegram",
+  "discord",
+  "whatsapp",
+  "teams",
+  "email",
+  "sms",
+  "webhook",
+  "governance",
+  "compliance",
+  "iso-42001",
+  "soc2",
+  "siem",
+  "deepclaw",
+  "svgph",
+  "siliconvalleyglobal"
 ]
 dependencies = [
-  "pydantic>=2.7.0",
-  "litellm>=1.40.0",
-  "mcp>=1.0.0",
-  "httpx>=0.27.0",
-  "typing-extensions>=4.11.0",
-  "structlog>=24.1.0"
+  "pydantic>=2.12.0",
+  "litellm>=1.83.0",
+  "httpx>=0.28.0",
+  "typing-extensions>=4.16.0"
 ]
 
 [project.urls]
@@ -37,11 +76,11 @@ Issues = "https://github.com/siliconvalleyglobal/DeepCLAW/issues"
 deepclaw = "deepclaw.cli.main:cli_entry"
 
 [project.optional-dependencies]
-dev = [
-  "pytest>=8.2.0",
+  dev = [
+  "pytest>=8.4.0",
   "pytest-asyncio>=0.23.0",
-  "ruff>=0.4.0",
-  "mypy>=1.10.0"
+  "ruff>=0.16.0",
+  "mypy>=1.19.0"
 ]
 
 [tool.pytest.ini_options]
@@ -53,6 +92,6 @@ line-length = 100
 target-version = "py312"
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.11"
 strict = true
 ignore_missing_imports = true

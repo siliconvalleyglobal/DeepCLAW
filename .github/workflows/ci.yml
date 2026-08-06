@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -e .
+      - run: python -m pytest deepclaw/tests/ -q
+
+  node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [sdk, gateway, plugin-sdk, extensions/telegram, extensions/discord, extensions/slack]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '26'
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm --filter ./packages/${{ matrix.package }} build
+      - run: pnpm --filter ./packages/${{ matrix.package }} test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '26'
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm --filter @deepclaw/sdk lint
+      - run: pnpm --filter @deepclaw/gateway lint
+      - run: pnpm --filter @deepclaw/plugin-sdk lint
+      - run: pnpm --filter ./extensions/telegram lint
+      - pnpm --filter ./extensions/discord lint
+      - pnpm --filter ./extensions/slack lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '26'
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm --filter @deepclaw/sdk typecheck
+      - run: pnpm --filter @deepclaw/gateway typecheck
+      - run: pnpm --filter @deepclaw/plugin-sdk typecheck

@@ -1,0 +1,40 @@
+{
+  "name": "@svgph/extension-webhook",
+  "version": "2.0.0",
+  "description": "DeepCLAW generic webhook extension for arbitrary REST integrations",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "oxlint --type-aware src/",
+    "format": "oxfmt --check src/",
+    "format:fix": "oxfmt --write src/",
+    "typecheck": "tsgo --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@deepclaw/core": "workspace:*",
+    "@deepclaw/plugin-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "typescript": "^7.0.2",
+    "tsdown": "^0.22.14",
+    "oxlint": "^1.77.0",
+    "oxfmt": "^0.62.0"
+  }
+}

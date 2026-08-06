@@ -1,9 +1,65 @@
 # Changelog
 
-All notable changes to the **DeepClaw** enterprise-governance-first AI agent framework will be documented in this file.
+All notable changes to the **DeepCLAW** enterprise-governance-first AI agent framework will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [2.0.0] - 2026-08-07
+
+### 🎯 Workflow Orchestration Engine
+
+- **Visual Workflow Builder**: New Lit-based UI component for drag-and-drop workflow creation with conditional branching, loops, retries, and sub-workflow support
+- **Expression Engine**: Dynamic template resolution with variable interpolation, nested property access, array operations, and boolean evaluation
+- **Sandboxed Code Execution**: Secure JavaScript execution in isolated VM contexts with configurable timeouts and resource limits
+- **Workflow Templates**: Built-in workflow templates for common patterns (data pipeline, approval flow, notification chain)
+- **Import/Export**: Full workflow portability with JSON-based import and export capabilities
+
+### 🔐 Credential Management
+
+- **Secure Credential Storage**: Encrypted storage for API keys, bearer tokens, OAuth2 credentials, and custom secrets
+- **Credential API**: RESTful endpoints for CRUD operations on credentials with audit logging
+- **Type-Safe Access**: Programmatic credential retrieval with type validation
+
+### ⏰ Scheduled Execution
+
+- **Cron-Based Scheduling**: Native cron expression support for workflow scheduling
+- **Schedule Management**: RESTful API and UI for managing scheduled workflows
+- **Next-Run Computation**: Automatic calculation of next execution times from cron expressions
+- **Enable/Disable Controls**: Toggle schedules on and off without deletion
+
+### 🔄 Real-Time Execution Monitoring
+
+- **WebSocket Gateway**: Production-grade WebSocket server for real-time event streaming
+- **Run Subscriptions**: Subscribe to specific workflow runs for live step-by-step updates
+- **Governance Dashboard Integration**: Real-time execution viewer component in the UI dashboard
+- **Event Broadcasting**: Automatic broadcast of run status changes, step completions, and errors
+
+### 🏗️ Node.js/TypeScript Monorepo
+
+- **Core Package (`@deepclaw/core`)**: Workflow engine, expression engine, scheduler, templates, and credential management
+- **Gateway Package (`@deepclaw/gateway`)**: REST API server, WebSocket gateway, and policy enforcement
+- **SDK Package (`@deepclaw/sdk`)**: Token optimizer, DLP engine, and budget guard
+- **Plugin SDK**: Extensible plugin development toolkit with lifecycle management
+- **Vitest Test Suite**: 62+ passing tests across core, gateway, and plugin-sdk packages
+
+### 🎨 Governance Dashboard UI
+
+- **Lit-Based Components**: Modern web components for policy viewer, audit log, budget tracker, and workflow builder
+- **Template Gallery**: Browse and instantiate pre-built workflow templates
+- **Schedule Manager**: Create, view, and delete workflow schedules
+- **Credential Manager**: Manage secrets and API keys through a web interface
+- **Import/Export Panel**: Visual workflow portability with JSON editor
+- **Real-Time Execution Viewer**: Live workflow execution monitoring via WebSocket
+
+### 🧪 Test Coverage
+
+- **Python Tests**: 47 passing tests for governance, memory, protocols, channels, and CLI
+- **TypeScript Tests**: 62+ passing tests for core, gateway, and plugin-sdk
+- **Integration Tests**: End-to-end gateway route tests for credentials, templates, schedules, and import/export
+- **WebSocket Tests**: Real-time subscription and broadcast tests
 
 ---
 
@@ -36,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [0.1.2] - 2026-07-30
-- Initial npm registry publication for `@svgph/deepclaw`.
+- Initial npm registry publication for `@deepclaw/sdk`.
 
 ---
 

@@ -1,0 +1,41 @@
+{
+  "name": "@deepclaw/sdk",
+  "version": "2.0.1",
+  "description": "DeepCLAW Node.js/TypeScript SDK with built-in optimizer",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:e2e": "vitest run tests/e2e",
+    "lint": "oxlint --type-aware src/ tests/",
+    "format": "oxfmt --check src/ tests/",
+    "format:fix": "oxfmt --write src/ tests/",
+    "typecheck": "tsgo --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@deepclaw/core": "workspace:*",
+    "@types/node": "^26.1.2",
+    "typescript": "^7.0.2",
+    "tsdown": "^0.22.14",
+    "oxlint": "^1.77.0",
+    "oxfmt": "^0.62.0",
+    "vitest": "^4.1.10"
+  }
+}

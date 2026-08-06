@@ -38,9 +38,9 @@ pip install -e .
 ### Node.js / TypeScript SDK
 
 ```bash
-npm install @svgph/deepclaw
+npm install @deepclaw/sdk
 # or
-bun add @svgph/deepclaw
+bun add @deepclaw/sdk
 ```
 
 ---

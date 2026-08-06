@@ -1,0 +1,9 @@
+{
+  "plugins": ["typescript", "import"],
+  "rules": {
+    "no-unused-vars": "error",
+    "no-console": "warn",
+    "prefer-const": "error",
+    "@typescript-eslint/no-explicit-any": "warn"
+  }
+}
