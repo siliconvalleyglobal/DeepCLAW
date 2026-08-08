@@ -30,18 +30,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build all packages
-        run: pnpm -r build
+      - name: Build package
+        run: pnpm build
 
-      - name: Publish core packages
-        run: |
-          cd packages/sdk && npm publish --access public
-          cd ../gateway && npm publish --access public
-          cd ../plugin-sdk && npm publish --access public
-          cd ../core && npm publish --access public
+      - name: Publish package
+        run: npm publish --access public --provenance
 
       - name: Publish extensions
         run: |
           for ext in telegram discord slack mcp a2a webhook; do
-            cd extensions/$ext && npm publish --access public
+            cd extensions/$ext && npm publish --access public --provenance
           done
