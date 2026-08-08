@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Sync package.json version
+        if: github.event.inputs.version != ''
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: npm version "$VERSION" --no-git-tag-version --allow-same-version
+
       - name: Build package
         run: pnpm build
 
