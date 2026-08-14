@@ -1,6 +1,6 @@
 {
   "name": "@svgph/deepclaw",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Enterprise-Governance-First Open Source AI Agent Framework",
   "packageManager": "pnpm@10.4.1",
   "engines": {

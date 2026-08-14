@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.2] - 2026-08-14
+
+### 🚀 Published Package Release
+- Official publish of **`@svgph/deepclaw@2.2.2`** with all new governance and orchestration features.
+
+---
+
 ## [2.2.1] - 2026-08-14
 
 ### 🔧 Improvements & Environment Fixes
