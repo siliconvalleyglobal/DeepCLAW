@@ -1,4 +1,4 @@
-import { PluginManifest, PluginContext, PluginTool, PluginValidationResult, PluginContract } from '@deepclaw/plugin-sdk';
+import { PluginManifest, PluginContext, PluginTool, PluginValidationResult, PluginContract } from '../../../src/plugin-sdk/index.js';
 
 export interface MCPToolRequest {
   name: string;

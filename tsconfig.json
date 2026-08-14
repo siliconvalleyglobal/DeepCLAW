@@ -10,6 +10,10 @@
     "declaration": true,
     "sourceMap": true,
     "lib": ["ES2023"],
-    "types": ["node"]
-  }
+    "types": ["node"],
+    "outDir": "./dist",
+    "rootDir": "."
+  },
+  "include": ["src/**/*", "tests/**/*.test.ts"],
+  "exclude": ["node_modules", "dist", "_packages_archive", "extensions", "ui", "deepclaw"]
 }

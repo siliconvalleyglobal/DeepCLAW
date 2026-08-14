@@ -8,4 +8,4 @@ echo "  - Channel Router: ACTIVE"
 echo "  - Memory Store: SQLite"
 echo ""
 
-exec node packages/gateway/dist/cli.mjs
+exec node dist/cli.mjs

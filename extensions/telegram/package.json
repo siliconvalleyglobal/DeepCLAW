@@ -26,10 +26,7 @@
     "typecheck": "tsgo --noEmit",
     "clean": "rm -rf dist"
   },
-  "dependencies": {
-    "@deepclaw/core": "workspace:*",
-    "@deepclaw/plugin-sdk": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^26.1.2",
     "typescript": "^7.0.2",

@@ -1,4 +1,4 @@
-import { PluginManifest, PluginContext, PluginTool, PluginValidationResult } from '@deepclaw/plugin-sdk';
+import { PluginManifest, PluginContext, PluginTool, PluginValidationResult } from '../../../src/plugin-sdk/index.js';
 
 export interface ZaloMessage {
   sender_id: string;

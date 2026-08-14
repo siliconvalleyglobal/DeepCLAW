@@ -5,7 +5,7 @@ Build extensions for DeepCLAW that add new channels, tools, protocols, and gover
 ## Installation
 
 ```bash
-npm install @deepclaw/plugin-sdk
+npm install @svgph/deepclaw
 ```
 
 ## Extension Structure
@@ -24,7 +24,7 @@ extensions/my-extension/
 
 ```json
 {
-  "name": "@deepclaw/extension-my-extension",
+  "name": "@svgph/extension-my-extension",
   "version": "2.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -38,10 +38,7 @@ extensions/my-extension/
     },
     "./package.json": "./package.json"
   },
-  "dependencies": {
-    "@deepclaw/core": "workspace:*",
-    "@deepclaw/plugin-sdk": "workspace:*"
-  }
+  "dependencies": {}
 }
 ```
 
@@ -190,17 +187,17 @@ export function validateMyPlugin(): PluginValidationResult {
 
 | Extension | Package | Description |
 |-----------|---------|-------------|
-| Telegram | `@deepclaw/extension-telegram` | Telegram messaging with DLP |
-| Discord | `@deepclaw/extension-discord` | Discord messaging with DLP |
-| Slack | `@deepclaw/extension-slack` | Slack messaging with DLP |
-| MCP | `@deepclaw/extension-mcp` | Model Context Protocol proxy |
-| Webhook | `@deepclaw/extension-webhook` | Generic REST webhook connector |
+| Telegram | `@svgph/extension-telegram` | Telegram messaging with DLP |
+| Discord | `@svgph/extension-discord` | Discord messaging with DLP |
+| Slack | `@svgph/extension-slack` | Slack messaging with DLP |
+| MCP | `@svgph/extension-mcp` | Model Context Protocol proxy |
+| Webhook | `@svgph/extension-webhook` | Generic REST webhook connector |
 
 ## Example: Minimal Extension
 
 ```ts
 // src/index.ts
-import { PluginManifest, PluginTool, PluginValidationResult } from '@deepclaw/plugin-sdk';
+import { PluginManifest, PluginTool, PluginValidationResult } from '@svgph/deepclaw';
 
 export const manifest: PluginManifest = {
   name: 'hello',

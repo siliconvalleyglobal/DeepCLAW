@@ -98,17 +98,17 @@ deepclaw/
 │   ├── cli/                    # Interactive terminal entry points
 │   └── tests/                  # Python test suite (47 tests)
 │
-├── packages/                   # Node.js / TypeScript monorepo
+├── src/                        # Node.js / TypeScript unified source
 │   ├── core/                   # Workflow engine, expression engine, scheduler, templates, credentials
 │   ├── gateway/                # REST API, WebSocket gateway, policy enforcement
 │   ├── sdk/                    # Token optimizer, DLP engine, budget guard
 │   └── plugin-sdk/             # Plugin development toolkit
 │
-├── ui/
+├── extensions/                 # Channel adapters & protocol extensions
+├── ui/                         # Governance dashboard UI
 │   └── dashboard/              # Lit-based governance dashboard
 │       └── src/components/     # Policy viewer, audit log, budget tracker, workflow builder
 │
-├── extensions/                 # Channel adapters & protocol extensions
 ├── docs/                       # Technical documentation
 ├── CHANGELOG.md                # Release notes
 ├── CONTRIBUTING.md             # Contribution guidelines
@@ -185,7 +185,7 @@ res = await router.route_inbound("signal", raw_payload, agent_handler)
 Visual workflow builder with conditional branching, loops, retries, sub-workflows, code execution, human approval gates, and real-time execution monitoring.
 
 ```typescript
-import { WorkflowRunner, WorkflowPersistence } from '@deepclaw/core';
+import { WorkflowRunner, WorkflowPersistence } from '@svgph/deepclaw';
 
 const persistence = new WorkflowPersistence('./data');
 const workflow = {
@@ -210,7 +210,7 @@ const result = await runner.execute('run-001');
 Secure storage and retrieval of API keys, bearer tokens, OAuth2 credentials, and custom secrets with audit logging.
 
 ```typescript
-import { CredentialManager } from '@deepclaw/gateway';
+import { CredentialManager } from '@svgph/deepclaw/server';
 
 const manager = new CredentialManager('./credentials');
 const credential = manager.create('openai-api-key', 'api_key', { key: 'sk-...' });
@@ -222,7 +222,7 @@ const retrieved = manager.get(credential.id);
 Cron-based workflow scheduling with enable/disable controls and next-run computation.
 
 ```typescript
-import { WorkflowScheduler } from '@deepclaw/core';
+import { WorkflowScheduler } from '@svgph/deepclaw';
 
 const scheduler = new WorkflowScheduler(persistence);
 await scheduler.schedule({
@@ -237,7 +237,7 @@ await scheduler.schedule({
 Dynamic template resolution with variable interpolation, nested property access, array operations, and boolean evaluation.
 
 ```typescript
-import { ExpressionEngine } from '@deepclaw/core';
+import { ExpressionEngine } from '@svgph/deepclaw';
 
 const engine = new ExpressionEngine();
 const result = engine.evaluate('Hello {{ user.name }}', { user: { name: 'Admin' } });
@@ -249,7 +249,7 @@ const result = engine.evaluate('Hello {{ user.name }}', { user: { name: 'Admin' 
 Token-aware prompt compression, secret redaction, repository context ranking, and budget tracking.
 
 ```javascript
-import { DeepClawOptimizer, DLPEngine, TokenBudgetGuard } from '@deepclaw/sdk';
+import { DeepClawOptimizer, DLPEngine, TokenBudgetGuard } from '@svgph/deepclaw';
 
 const optimizer = new DeepClawOptimizer({ contextMaxTokens: 8000 });
 const ranked = optimizer.optimizeContext('analyze security policy', process.cwd());

@@ -37,12 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Governance Dashboard Integration**: Real-time execution viewer component in the UI dashboard
 - **Event Broadcasting**: Automatic broadcast of run status changes, step completions, and errors
 
-### 🏗️ Node.js/TypeScript Monorepo
+### 🏗️ Unified Node.js/TypeScript Package
 
-- **Core Package (`@deepclaw/core`)**: Workflow engine, expression engine, scheduler, templates, and credential management
-- **Gateway Package (`@deepclaw/gateway`)**: REST API server, WebSocket gateway, and policy enforcement
-- **SDK Package (`@deepclaw/sdk`)**: Token optimizer, DLP engine, and budget guard
-- **Plugin SDK**: Extensible plugin development toolkit with lifecycle management
+- **Single Package (`@svgph/deepclaw`)**: Consolidated `@deepclaw/core`, `@deepclaw/gateway`, `@deepclaw/sdk`, and `@deepclaw/plugin-sdk` into a single publishable npm package
+- **Monorepo Deprecated**: Removed workspace-based publishing in favor of a unified distribution model
 - **Vitest Test Suite**: 62+ passing tests across core, gateway, and plugin-sdk packages
 
 ### 🎨 Governance Dashboard UI
@@ -92,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [0.1.2] - 2026-07-30
-- Initial npm registry publication for `@deepclaw/sdk`.
+- Initial npm registry publication for `@svgph/deepclaw`.
 
 ---
 

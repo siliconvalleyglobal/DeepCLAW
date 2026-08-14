@@ -39,3 +39,6 @@ Thumbs.db
 
 # Build outputs
 *.tsbuildinfo
+_packages_archive/
+deepclaw-credentials/
+deepclaw.db/
