@@ -15,5 +15,5 @@
     "rootDir": "."
   },
   "include": ["src/**/*", "tests/**/*.test.ts"],
-  "exclude": ["node_modules", "dist", "_packages_archive", "extensions", "ui", "deepclaw"]
+  "exclude": ["node_modules", "dist", "extensions", "ui", "deepclaw"]
 }

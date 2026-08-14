@@ -480,6 +480,113 @@ export class DLPEngine {
   }
 }
 
+export interface InjectionScanResult {
+  isSafe: boolean;
+  threatLevel: 'none' | 'low' | 'medium' | 'high' | 'critical';
+  matchedPatterns: string[];
+  sanitizedPrompt?: string;
+  reason?: string;
+}
+
+export class PromptInjectionGuard {
+  private injectionPatterns: Array<{ name: string; regex: RegExp; severity: 'low' | 'medium' | 'high' | 'critical' }> = [
+    { name: 'SYSTEM_PROMPT_OVERRIDE', regex: /(?:ignore\s+(?:all\s+)?(?:previous|prior|above)\s+instructions|disregard\s+(?:all\s+)?guidelines)/i, severity: 'critical' },
+    { name: 'ROLEPLAY_JAILBREAK', regex: /(?:you\s+are\s+now\s+dan|do\s+anything\s+now|developer\s+mode\s+enabled|jailbreak\s+mode)/i, severity: 'critical' },
+    { name: 'PROMPT_LEAK_EXTRACTION', regex: /(?:repeat\s+(?:the\s+)?(?:entire\s+)?system\s+prompt|what\s+are\s+your\s+hidden\s+rules|print\s+initial\s+instructions)/i, severity: 'high' },
+    { name: 'DELIMITER_HIJACK', regex: /(?:<\/?(?:system|instruction|admin|im_start|im_end)>|```(?:system|admin))/i, severity: 'high' },
+    { name: 'BASE64_EVASION_TRIGGER', regex: /(?:execute|decode|eval)\s+(?:base64|hex|encoded)\s*:/i, severity: 'medium' },
+  ];
+
+  scan(prompt: string): InjectionScanResult {
+    const matched: string[] = [];
+    let highestSeverity: 'none' | 'low' | 'medium' | 'high' | 'critical' = 'none';
+
+    for (const pattern of this.injectionPatterns) {
+      if (pattern.regex.test(prompt)) {
+        matched.push(pattern.name);
+        if (pattern.severity === 'critical' || highestSeverity === 'none') {
+          highestSeverity = pattern.severity;
+        }
+      }
+    }
+
+    if (matched.length > 0) {
+      return {
+        isSafe: false,
+        threatLevel: highestSeverity,
+        matchedPatterns: matched,
+        reason: `Potential adversarial prompt injection detected: ${matched.join(', ')}`,
+      };
+    }
+
+    return {
+      isSafe: true,
+      threatLevel: 'none',
+      matchedPatterns: [],
+    };
+  }
+
+  sanitize(prompt: string): string {
+    let cleaned = prompt;
+    for (const pattern of this.injectionPatterns) {
+      cleaned = cleaned.replace(pattern.regex, '[REDACTED_ADVERSARIAL_INSTRUCTION]');
+    }
+    return cleaned;
+  }
+}
+
+export interface GraphEntity {
+  id: string;
+  name: string;
+  type: string;
+  properties?: Record<string, unknown>;
+}
+
+export interface GraphRelationship {
+  sourceId: string;
+  targetId: string;
+  relation: string;
+  metadata?: Record<string, unknown>;
+}
+
+export class KnowledgeGraphMemory {
+  private entities = new Map<string, GraphEntity>();
+  private relationships: GraphRelationship[] = [];
+
+  addEntity(entity: GraphEntity): void {
+    this.entities.set(entity.id, entity);
+  }
+
+  getEntity(id: string): GraphEntity | undefined {
+    return this.entities.get(id);
+  }
+
+  addRelationship(rel: GraphRelationship): void {
+    this.relationships.push(rel);
+  }
+
+  findRelated(entityId: string): Array<{ relation: string; entity: GraphEntity }> {
+    const results: Array<{ relation: string; entity: GraphEntity }> = [];
+    for (const rel of this.relationships) {
+      if (rel.sourceId === entityId) {
+        const target = this.entities.get(rel.targetId);
+        if (target) results.push({ relation: rel.relation, entity: target });
+      } else if (rel.targetId === entityId) {
+        const source = this.entities.get(rel.sourceId);
+        if (source) results.push({ relation: `inverse_${rel.relation}`, entity: source });
+      }
+    }
+    return results;
+  }
+
+  exportGraph(): { entities: GraphEntity[]; relationships: GraphRelationship[] } {
+    return {
+      entities: Array.from(this.entities.values()),
+      relationships: [...this.relationships],
+    };
+  }
+}
+
 export class DeepClawOptimizer {
   private config: typeof DEFAULT_CONFIG;
   private budgetManager: BudgetManager;

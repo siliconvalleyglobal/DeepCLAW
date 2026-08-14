@@ -19,6 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **WebSocket Real-Time Broadcasts**: Instant event propagation of approval requests and resolution events to connected monitoring clients and dashboards.
 - **Python Governance HumanCheckpointNode Upgrade**: Integrated timeout limits, automated timeout policies (`approve`/`reject`), and structured audit metadata into the Python execution graph.
 
+### 🛡️ Real-Time Prompt Injection & Jailbreak Defense Guardrail
+
+- **Zero-Latency Prompt Inspection**: `PromptInjectionGuard` and `VulnerabilityScanner.scan_prompt` detect system prompt overrides, roleplay jailbreaks (DAN), hidden instruction extractions, and delimiter hijacking.
+- **Adversarial Instruction Sanitization**: Auto-redaction of jailbreak tokens before prompting agent execution models.
+
+### 🧠 Multi-Agent Knowledge Graph Memory
+
+- **Entity-Relationship Graph Engine**: `KnowledgeGraphMemory` for entity nodes, relationship links, and bi-directional graph traversals across multi-agent sessions.
+
+### 📊 ISO 42001 & SOC 2 Continuous Compliance Reporting
+
+- **Clause 8.4 Human Oversight Mapping**: Automated audit evidence generation for HITL checkpoints and SOC 2 CC6.8 preventative control guarantees.
+
 ---
 
 ## [2.0.0] - 2026-08-07

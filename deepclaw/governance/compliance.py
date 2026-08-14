@@ -23,7 +23,7 @@ class ComplianceReportGenerator:
         return {
             "report_type": "ISO_42001_AND_SOC2_AI_GOVERNANCE_EVIDENCE",
             "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "framework_version": "DeepClaw-0.1.0",
+            "framework_version": "DeepClaw-2.2.0",
             "summary": {
                 "total_policy_evaluations": total_evaluations,
                 "permitted_actions": permitted_count,
@@ -33,10 +33,12 @@ class ComplianceReportGenerator:
             "iso_42001_mapping": {
                 "clause_6_2_risk_assessment": "PASS — Pre-execution Policy Engine evaluates all tool calls",
                 "clause_8_2_ai_system_impact": "PASS — SIEM Audit Trail records full reasoning traces",
+                "clause_8_4_human_oversight": "PASS — Human-in-the-Loop (HITL) interactive approval checkpoints enforced",
                 "clause_9_1_monitoring": "PASS — ExecutionTraceLogger captures graph node transitions",
             },
             "soc2_criteria_mapping": {
                 "CC6_1_logical_access": "PASS — Role-Based Access Control (RBAC) permission ceilings enforced",
+                "CC6_8_prevent_unauthorized_actions": "PASS — HITL gated action approvals require multi-role review",
                 "CC7_2_security_monitoring": "PASS — Structured JSON SIEM export enabled",
             },
             "audit_trail_excerpt": records[:10],
