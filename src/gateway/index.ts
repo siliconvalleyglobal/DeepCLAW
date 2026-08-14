@@ -576,6 +576,72 @@ export class DeepClawGateway {
       return c.json(exportData);
     });
 
+    this.app.get('/api/v1/approvals/pending', (c) => {
+      const allRuns = this.persistence.listAllRuns();
+      const pending: Array<{ runId: string; workflowId: string; step: WorkflowRun['steps'][number] }> = [];
+      for (const run of allRuns) {
+        if (run.status === 'waiting_approval' || run.steps.some((s) => s.status === 'waiting_approval')) {
+          for (const step of run.steps) {
+            if (step.status === 'waiting_approval') {
+              pending.push({
+                runId: run.id,
+                workflowId: run.workflowId,
+                step,
+              });
+            }
+          }
+        }
+      }
+      return c.json({ success: true, count: pending.length, data: pending, timestamp: Date.now() });
+    });
+
+    this.app.post('/api/v1/approvals/:runId/:stepId/resolve', async (c) => {
+      try {
+        const { runId, stepId } = c.req.param();
+        const body = await c.req.json<{
+          approved: boolean;
+          approver?: string;
+          reason?: string;
+        }>();
+
+        if (typeof body.approved !== 'boolean') {
+          return this._jsonError(c, -32600, 'approved (boolean) is required in payload', 400);
+        }
+
+        const runner = new WorkflowRunner(this.persistence);
+        const decision = {
+          approved: body.approved,
+          approver: body.approver || 'system_admin',
+          reason: body.reason,
+          timestamp: Date.now(),
+        };
+
+        const updatedRun = await runner.resolveApproval(runId, stepId, decision);
+
+        this.auditLogs.push({
+          type: 'approval_decision',
+          runId,
+          stepId,
+          decision,
+          timestamp: Date.now(),
+        });
+
+        if (this.wsGateway) {
+          this.wsGateway.broadcastRunUpdate(runId, {
+            type: 'approval_resolved',
+            stepId,
+            decision,
+            runStatus: updatedRun.status,
+          });
+        }
+
+        return c.json({ success: true, data: updatedRun, timestamp: Date.now() });
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        return this._jsonError(c, -32602, message, 400);
+      }
+    });
+
     this.app.post('/api/v1/workflows/import', async (c) => {
       try {
         const body = await c.req.json<{ workflow: WorkflowDefinition; runs?: WorkflowRun[] }>();

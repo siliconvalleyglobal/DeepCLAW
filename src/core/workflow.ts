@@ -107,13 +107,38 @@ export interface OpenClawGatewayMessage {
   };
 }
 
+export interface ApprovalConfig {
+  roles?: string[];
+  timeoutMs?: number;
+  message?: string;
+  autoActionOnTimeout?: 'approve' | 'reject';
+}
+
+export interface ApprovalDecision {
+  approved: boolean;
+  approver: string;
+  reason?: string;
+  timestamp: number;
+}
+
+export interface ApprovalRequest {
+  stepId: string;
+  runId: string;
+  action: string;
+  message?: string;
+  requestedAt: number;
+  timeoutAt?: number;
+  requiredRoles?: string[];
+  decision?: ApprovalDecision;
+}
+
 export interface WorkflowStep {
   id: string;
   name: string;
   action: string;
   input?: Record<string, unknown>;
   output?: Record<string, unknown>;
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: 'pending' | 'running' | 'waiting_approval' | 'completed' | 'failed';
   error?: string;
   startedAt?: number;
   finishedAt?: number;
@@ -121,13 +146,15 @@ export interface WorkflowStep {
   maxRetries?: number;
   retryDelayMs?: number;
   continueOnError?: boolean;
+  approval?: ApprovalConfig;
+  approvalRequest?: ApprovalRequest;
 }
 
 export interface WorkflowRun {
   id: string;
   workflowId: string;
   version: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  status: 'pending' | 'running' | 'waiting_approval' | 'completed' | 'failed' | 'cancelled';
   input: Record<string, unknown>;
   output?: Record<string, unknown>;
   steps: WorkflowStep[];
@@ -142,7 +169,7 @@ export interface WorkflowDefinition {
   name: string;
   description: string;
   version: string;
-  steps: Omit<WorkflowStep, 'id' | 'status' | 'startedAt' | 'finishedAt' | 'output' | 'error'>[];
+  steps: Omit<WorkflowStep, 'id' | 'status' | 'startedAt' | 'finishedAt' | 'output' | 'error' | 'approvalRequest'>[];
   createdAt: number;
   updatedAt: number;
   triggers?: WorkflowTrigger[];

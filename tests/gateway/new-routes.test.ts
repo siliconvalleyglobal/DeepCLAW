@@ -161,4 +161,14 @@ describe('Gateway new routes', () => {
       expect(data.data.name).toBe('Import Test');
     });
   });
+
+  describe('approvals', () => {
+    test('lists pending approvals', async () => {
+      const res = await fetch(`${base()}/api/v1/approvals/pending`);
+      expect(res.status).toBe(200);
+      const data = await res.json() as any;
+      expect(data.success).toBe(true);
+      expect(Array.isArray(data.data)).toBe(true);
+    });
+  });
 });

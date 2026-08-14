@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.0] - 2026-08-14
+
+### 🧑‍💼 Human-in-the-Loop (HITL) Interactive Approval Engine
+
+- **Workflow Approval Checkpoints**: Native support for `waiting_approval` status in workflow steps and runs with approval configurations (timeout policies, custom messages, required RBAC roles).
+- **Interactive Approval Resumption**: Programmatic and API-driven resolution of pending approvals (`resolveApproval`) allowing seamless unpausing or structured failure upon rejection.
+- **REST Approval Endpoints**:
+  - `GET /api/v1/approvals/pending` - List all active execution approval checkpoints across workflows.
+  - `POST /api/v1/approvals/:runId/:stepId/resolve` - Submit human approval decisions with approver identity and audit comments.
+- **WebSocket Real-Time Broadcasts**: Instant event propagation of approval requests and resolution events to connected monitoring clients and dashboards.
+- **Python Governance HumanCheckpointNode Upgrade**: Integrated timeout limits, automated timeout policies (`approve`/`reject`), and structured audit metadata into the Python execution graph.
+
+---
+
 ## [2.0.0] - 2026-08-07
 
 ### 🎯 Workflow Orchestration Engine

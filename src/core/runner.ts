@@ -15,9 +15,10 @@ export interface WorkflowRunnerOptions {
 
 export interface StepResult {
   stepId: string;
-  status: 'completed' | 'failed' | 'skipped';
+  status: 'completed' | 'failed' | 'skipped' | 'waiting_approval';
   output?: Record<string, unknown>;
   error?: string;
+  approvalRequest?: ApprovalRequest;
 }
 
 export class WorkflowRunner {
@@ -58,13 +59,33 @@ export class WorkflowRunner {
       const results = new Map<string, StepResult>();
       const context: ExpressionContext = { input: run.input, steps: results, workflow };
 
+      // Pre-fill previously completed step results if resuming
+      for (const s of run.steps) {
+        if (s.status === 'completed' && s.output) {
+          results.set(s.id, { stepId: s.id, status: 'completed', output: s.output });
+          context[`step_${s.id}`] = s.output;
+        }
+      }
+
       for (const step of workflow.steps) {
         const runStep = run.steps.find((s) => s.action === step.action && s.name === step.name);
         if (!runStep) continue;
 
+        // Skip steps already completed
+        if (runStep.status === 'completed') {
+          continue;
+        }
+
         const result = await this.executeStep(runStep, workflow, context, run);
         results.set(runStep.id, result);
         this.options.onStepUpdate?.(runId, runStep, result.output);
+
+        if (result.status === 'waiting_approval') {
+          updated.status = 'waiting_approval';
+          updated.updatedAt = Date.now();
+          this.persistence.saveRun(updated);
+          return updated;
+        }
 
         if (result.status === 'failed' && !runStep.continueOnError) {
           updated.status = 'failed';
@@ -73,7 +94,7 @@ export class WorkflowRunner {
         }
       }
 
-      if (updated.status !== 'failed') {
+      if (updated.status !== 'failed' && updated.status !== 'waiting_approval') {
         updated.status = 'completed';
         updated.finishedAt = Date.now();
         updated.output = this.buildOutput(results);
@@ -91,7 +112,100 @@ export class WorkflowRunner {
     }
   }
 
+  async resolveApproval(
+    runId: string,
+    stepId: string,
+    decision: ApprovalDecision
+  ): Promise<WorkflowRun> {
+    const run = this.persistence.loadRun(runId);
+    if (!run) throw new Error(`Run ${runId} not found`);
+
+    const stepIndex = run.steps.findIndex((s) => s.id === stepId);
+    if (stepIndex === -1) throw new Error(`Step ${stepId} not found in run ${runId}`);
+
+    const step = run.steps[stepIndex];
+    if (step.status !== 'waiting_approval') {
+      throw new Error(`Step ${stepId} is not waiting for approval (current status: ${step.status})`);
+    }
+
+    const approvalRequest: ApprovalRequest = {
+      ...(step.approvalRequest ?? {
+        stepId,
+        runId,
+        action: step.action,
+        requestedAt: step.startedAt ?? Date.now(),
+      }),
+      decision,
+    };
+
+    if (!decision.approved) {
+      this.persistence.updateStep(runId, stepId, {
+        status: 'failed',
+        error: `Approval rejected by ${decision.approver}${decision.reason ? ': ' + decision.reason : ''}`,
+        finishedAt: Date.now(),
+        approvalRequest,
+      });
+
+      const updatedRun: WorkflowRun = {
+        ...run,
+        status: 'failed',
+        finishedAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      this.persistence.saveRun(updatedRun);
+      return updatedRun;
+    }
+
+    // Approved: Mark step as approved and resume execution
+    this.persistence.updateStep(runId, stepId, {
+      status: 'running',
+      approvalRequest,
+    });
+
+    const reloadedRun = this.persistence.loadRun(runId);
+    if (reloadedRun) {
+      reloadedRun.status = 'running';
+      this.persistence.saveRun(reloadedRun);
+    }
+
+    return this.execute(runId);
+  }
+
   async executeStep(step: WorkflowStep, workflow: WorkflowDefinition, context: ExpressionContext, run: WorkflowRun): Promise<StepResult> {
+    // Check if step requires approval and hasn't been approved yet
+    const requiresApproval = step.approval !== undefined || step.action.startsWith('approval:') || step.action.startsWith('hitl:');
+    const isApproved = step.approvalRequest?.decision?.approved === true;
+
+    if (requiresApproval && !isApproved) {
+      const requestedAt = Date.now();
+      const message = step.approval?.message ?? (step.input?.message as string) ?? `Approval required for step ${step.name}`;
+      const timeoutMs = step.approval?.timeoutMs;
+      const timeoutAt = timeoutMs ? requestedAt + timeoutMs : undefined;
+      const requiredRoles = step.approval?.roles;
+
+      const approvalRequest: ApprovalRequest = {
+        stepId: step.id,
+        runId: run.id,
+        action: step.action,
+        message,
+        requestedAt,
+        timeoutAt,
+        requiredRoles,
+      };
+
+      this.persistence.updateStep(run.id, step.id, {
+        status: 'waiting_approval',
+        startedAt: requestedAt,
+        approvalRequest,
+      });
+
+      return {
+        stepId: step.id,
+        status: 'waiting_approval',
+        approvalRequest,
+      };
+    }
+
     const maxRetries = step.maxRetries ?? 0;
     let attempt = 0;
 

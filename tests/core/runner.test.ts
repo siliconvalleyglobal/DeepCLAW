@@ -114,4 +114,94 @@ describe('WorkflowRunner', () => {
     expect(updates.length).toBeGreaterThanOrEqual(1);
     expect(updates[0].runId).toBe(run.id);
   });
+
+  test('pauses workflow on step requiring approval and resumes after approval', async () => {
+    const persistence = createPersistence();
+    const workflow = createWorkflow([
+      { name: 'step1', action: 'transform.json', input: { text: 'ready' } },
+      {
+        name: 'step2_approval',
+        action: 'database.delete_records',
+        approval: { message: 'Approve deleting records?', roles: ['admin'] },
+      },
+      { name: 'step3_done', action: 'transform.uppercase', input: { text: 'finished' } },
+    ]);
+    persistence.saveWorkflow(workflow);
+
+    const run: WorkflowRun = {
+      id: 'run-hitl-1',
+      workflowId: workflow.id,
+      version: workflow.version,
+      status: 'pending',
+      input: {},
+      steps: workflow.steps.map((step) => ({
+        ...step,
+        id: `step-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        status: 'pending' as const,
+      })),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    persistence.saveRun(run);
+
+    const runner = new WorkflowRunner(persistence);
+    const pausedResult = await runner.execute(run.id);
+
+    expect(pausedResult.status).toBe('waiting_approval');
+    const approvalStep = pausedResult.steps.find((s) => s.name === 'step2_approval');
+    expect(approvalStep?.status).toBe('waiting_approval');
+    expect(approvalStep?.approvalRequest?.message).toBe('Approve deleting records?');
+
+    // Approve the step
+    const resumedResult = await runner.resolveApproval(run.id, approvalStep!.id, {
+      approved: true,
+      approver: 'admin@svg.ph',
+      timestamp: Date.now(),
+    });
+
+    expect(resumedResult.status).toBe('completed');
+    const finalStep = resumedResult.steps.find((s) => s.name === 'step3_done');
+    expect(finalStep?.status).toBe('completed');
+  });
+
+  test('fails workflow when approval is rejected', async () => {
+    const persistence = createPersistence();
+    const workflow = createWorkflow([
+      {
+        name: 'step_sensitive',
+        action: 'hitl:approve_payment',
+        approval: { message: 'Transfer approval' },
+      },
+    ]);
+    persistence.saveWorkflow(workflow);
+
+    const run: WorkflowRun = {
+      id: 'run-hitl-reject',
+      workflowId: workflow.id,
+      version: workflow.version,
+      status: 'pending',
+      input: {},
+      steps: workflow.steps.map((step) => ({
+        ...step,
+        id: `step-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        status: 'pending' as const,
+      })),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    persistence.saveRun(run);
+
+    const runner = new WorkflowRunner(persistence);
+    await runner.execute(run.id);
+
+    const rejectedResult = await runner.resolveApproval(run.id, run.steps[0].id, {
+      approved: false,
+      approver: 'compliance_officer',
+      reason: 'Exceeds transaction limits',
+      timestamp: Date.now(),
+    });
+
+    expect(rejectedResult.status).toBe('failed');
+    expect(rejectedResult.steps[0].error).toContain('Exceeds transaction limits');
+  });
 });

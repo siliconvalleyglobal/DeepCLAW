@@ -57,3 +57,38 @@ def test_telegram_channel_http_adapter():
     msg = ChannelMessage(message_id="101", sender_id="user1", recipient_id="chat1", content="Hello Telegram", channel="telegram")
     res = adapter.send_message(msg)
     assert res["status"] in ["sent_local_mode", "success", "failed"]
+
+
+def test_human_checkpoint_hitl_lifecycle():
+    from deepclaw.governance.human_checkpoint import HumanCheckpointNode
+    from deepclaw.core.state import State
+
+    node = HumanCheckpointNode(
+        action_name="wire_transfer",
+        description="Approve $50,000 transfer",
+        required_roles=["finance_admin"],
+        timeout_seconds=5.0,
+    )
+    state = State()
+
+    # Initial execution requests approval
+    res = node(state)
+    assert res["__paused__"] is True
+    assert res["__pending_approval__"]["action"] == "wire_transfer"
+    assert "finance_admin" in res["__pending_approval__"]["required_roles"]
+
+    # Rejection raises PermissionError
+    state.set("__approval_wire_transfer__", False)
+    state.set("__approval_reason_wire_transfer__", "Suspicious destination account")
+    with pytest.raises(PermissionError) as exc_info:
+        node(state)
+    assert "Suspicious destination account" in str(exc_info.value)
+
+    # Approval succeeds and unpauses
+    state.set("__approval_wire_transfer__", True)
+    state.set("__approver_wire_transfer__", "cfo@svg.ph")
+    res_approved = node(state)
+    assert res_approved["__paused__"] is False
+    assert res_approved["__approval_metadata__"]["approved"] is True
+    assert res_approved["__approval_metadata__"]["approver"] == "cfo@svg.ph"
+
