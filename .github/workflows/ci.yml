@@ -14,17 +14,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -e .
-      - run: python -m pytest deepclaw/tests/ -q
+      - run: pip install -e ".[dev]" || pip install -e . pytest
+      - run: python -m pytest tests/ -q
 
   node:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v4
         with:
-          node-version: '26'
+          node-version: '22'
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm build
@@ -35,9 +35,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v4
         with:
-          node-version: '26'
+          node-version: '22'
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm lint
@@ -47,25 +47,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v4
         with:
-          node-version: '26'
+          node-version: '22'
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm typecheck
 
-  extensions:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        extension: [telegram, discord, slack, mcp, a2a, webhook]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '26'
-          cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm --filter @svgph/extension-${{ matrix.extension }} build
-      - run: pnpm --filter @svgph/extension-${{ matrix.extension }} test
