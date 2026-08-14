@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.2.1] - 2026-08-14
+
+### 🔧 Improvements & Environment Fixes
+- **Node.js 22 Compatibility**: Enhanced compatibility with modern toolchains (Vitest 4, Rolldown 1.2, TypeScript 7).
+- **CI/CD Optimization**: Verified GitHub Actions workflows and setup-node v4 configuration.
+- **Workflow Step Preservation & Approval Stabilization**: Resolved run step state tracking and verification in HITL approval pipelines.
+
+---
+
 ## [2.2.0] - 2026-08-14
 
 ### 🧑‍💼 Human-in-the-Loop (HITL) Interactive Approval Engine
