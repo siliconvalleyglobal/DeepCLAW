@@ -1,6 +1,6 @@
 import vm from 'node:vm';
 import { WorkflowPersistence } from './persistence.js';
-import type { WorkflowDefinition, WorkflowRun, WorkflowStep } from './workflow.js';
+import type { WorkflowDefinition, WorkflowRun, WorkflowStep, ApprovalRequest, ApprovalDecision } from './workflow.js';
 import { ExpressionEngine, ExpressionContext } from './expression.js';
 
 export interface WorkflowRunnerOptions {
@@ -81,32 +81,30 @@ export class WorkflowRunner {
         this.options.onStepUpdate?.(runId, runStep, result.output);
 
         if (result.status === 'waiting_approval') {
-          updated.status = 'waiting_approval';
-          updated.updatedAt = Date.now();
-          this.persistence.saveRun(updated);
-          return updated;
+          const current = this.persistence.loadRun(runId) ?? updated;
+          current.status = 'waiting_approval';
+          current.updatedAt = Date.now();
+          this.persistence.saveRun(current);
+          return current;
         }
 
         if (result.status === 'failed' && !runStep.continueOnError) {
-          updated.status = 'failed';
-          updated.finishedAt = Date.now();
+          const current = this.persistence.loadRun(runId) ?? updated;
+          current.status = 'failed';
+          current.finishedAt = Date.now();
+          this.persistence.saveRun(current);
           break;
         }
       }
 
-      if (updated.status !== 'failed' && updated.status !== 'waiting_approval') {
-        updated.status = 'completed';
-        updated.finishedAt = Date.now();
-        updated.output = this.buildOutput(results);
+      const current = this.persistence.loadRun(runId) ?? updated;
+      if (current.status !== 'failed' && current.status !== 'waiting_approval') {
+        current.status = 'completed';
+        current.finishedAt = Date.now();
+        current.output = this.buildOutput(results);
+        this.persistence.saveRun(current);
       }
-
-      const latest = this.persistence.loadRun(runId);
-      if (latest) {
-        this.persistence.saveRun(latest);
-      } else {
-        this.persistence.saveRun(updated);
-      }
-      return latest ?? updated;
+      return this.persistence.loadRun(runId) ?? current;
     } finally {
       this.running.delete(runId);
     }
@@ -146,14 +144,12 @@ export class WorkflowRunner {
         approvalRequest,
       });
 
-      const updatedRun: WorkflowRun = {
-        ...run,
-        status: 'failed',
-        finishedAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-      this.persistence.saveRun(updatedRun);
-      return updatedRun;
+      const reloaded = this.persistence.loadRun(runId) ?? run;
+      reloaded.status = 'failed';
+      reloaded.finishedAt = Date.now();
+      reloaded.updatedAt = Date.now();
+      this.persistence.saveRun(reloaded);
+      return reloaded;
     }
 
     // Approved: Mark step as approved and resume execution

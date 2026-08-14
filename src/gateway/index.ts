@@ -627,11 +627,12 @@ export class DeepClawGateway {
         });
 
         if (this.wsGateway) {
-          this.wsGateway.broadcastRunUpdate(runId, {
-            type: 'approval_resolved',
-            stepId,
-            decision,
-            runStatus: updatedRun.status,
+          const resolvedStep = updatedRun.steps.find((s) => s.id === stepId);
+          this.wsGateway.broadcastRunUpdate({
+            type: 'run_update',
+            runId,
+            status: updatedRun.status,
+            step: resolvedStep,
           });
         }
 

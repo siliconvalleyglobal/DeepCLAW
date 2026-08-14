@@ -64,6 +64,10 @@ export class WorkflowPersistence {
     return runs.sort((a, b) => b.createdAt - a.createdAt);
   }
 
+  listAllRuns(): WorkflowRun[] {
+    return this.listRuns();
+  }
+
   updateStep(runId: string, stepId: string, updates: Partial<WorkflowStep>) {
     const run = this.loadRun(runId);
     if (!run) return;
